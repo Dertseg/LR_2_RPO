@@ -1,7 +1,7 @@
 ﻿<Window x:Class="TicTacToe.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Крестики-Нолики" Height="700" Width="520"
+        Title="Крестики-Нолики v2.0" Height="1092" Width="600"
         Background="#1A1A2E" 
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
@@ -12,7 +12,7 @@
     <!-- Ресурсы приложения -->
     <Window.Resources>
 
-        <!-- Эффект свечения -->
+        <!-- Эффекты свечения -->
         <DropShadowEffect x:Key="GlowEffect" Color="#6B7FFF" BlurRadius="25" ShadowDepth="0" Opacity="0.7"/>
         <DropShadowEffect x:Key="SoftShadow" Color="#000000" BlurRadius="10" ShadowDepth="2" Opacity="0.3"/>
 
@@ -22,7 +22,7 @@
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="64"/>
             <Setter Property="FontWeight" Value="ExtraBold"/>
-            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Margin" Value="8"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Effect" Value="{StaticResource SoftShadow}"/>
             <Setter Property="Template">
@@ -33,24 +33,15 @@
                                 CornerRadius="20" 
                                 BorderBrush="#3A3A6E" 
                                 BorderThickness="2">
-                            <Border.Effect>
-                                <DropShadowEffect Color="#000000" BlurRadius="15" ShadowDepth="3" Opacity="0.4"/>
-                            </Border.Effect>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="border" Property="Background" Value="#2D2D52"/>
                                 <Setter TargetName="border" Property="BorderBrush" Value="#5A5A9E"/>
-                                <Setter TargetName="border" Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect Color="#6B7FFF" BlurRadius="20" ShadowDepth="0" Opacity="0.6"/>
-                                    </Setter.Value>
-                                </Setter>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="border" Property="Background" Value="#1F1F3A"/>
-                                <Setter TargetName="border" Property="BorderThickness" Value="3"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -58,39 +49,32 @@
             </Setter>
         </Style>
 
-        <!-- Стиль для кнопки рестарта -->
-        <Style x:Key="RestartButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#FF6B8B"/>
+        <!-- Стиль для всех кнопок управления -->
+        <Style x:Key="ControlButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2D2D52"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Padding" Value="25,12"/>
-            <Setter Property="Margin" Value="0,35,0,0"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Width" Value="140"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Margin" Value="5"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Effect" Value="{StaticResource GlowEffect}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="border" 
                                 Background="{TemplateBinding Background}" 
-                                CornerRadius="30"
+                                CornerRadius="15"
                                 BorderThickness="0">
-                            <Border.Effect>
-                                <DropShadowEffect Color="#FF6B8B" BlurRadius="20" ShadowDepth="0" Opacity="0.6"/>
-                            </Border.Effect>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#FF5275"/>
-                                <Setter TargetName="border" Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect Color="#FF5275" BlurRadius="30" ShadowDepth="0" Opacity="0.8"/>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter TargetName="border" Property="Background" Value="#3A3A6E"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#E63955"/>
+                                <Setter TargetName="border" Property="Background" Value="#1F1F3A"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -98,11 +82,172 @@
             </Setter>
         </Style>
 
-        <!-- Анимация пульсации для статуса -->
-        <Storyboard x:Key="PulseAnimation" RepeatBehavior="Forever">
-            <DoubleAnimation Storyboard.TargetProperty="Opacity" 
-                           From="1" To="0.7" Duration="0:0:1" AutoReverse="True"/>
-        </Storyboard>
+        <!-- Стиль для ComboBox (исправленный) -->
+        <Style x:Key="CustomComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Background" Value="#2D2D52"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Margin" Value="0,5,0,0"/>
+            <Setter Property="Width" Value="130"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton x:Name="ToggleButton"
+                                        Background="{TemplateBinding Background}"
+                                        Foreground="{TemplateBinding Foreground}"
+                                        Focusable="false"
+                                        IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                        ClickMode="Press">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border x:Name="border"
+                                                Background="{TemplateBinding Background}" 
+                                                CornerRadius="12"
+                                                BorderBrush="#3A3A6E" 
+                                                BorderThickness="2">
+                                            <Border.Effect>
+                                                <DropShadowEffect Color="#000000" BlurRadius="8" ShadowDepth="1" Opacity="0.3"/>
+                                            </Border.Effect>
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#3A3A6E"/>
+                                                <Setter TargetName="border" Property="BorderBrush" Value="#5A5A9E"/>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter TargetName="border" Property="Background" Value="#252542"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                                <ContentPresenter Content="{TemplateBinding SelectionBoxItem}"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Margin="5"/>
+                            </ToggleButton>
+                            <Popup x:Name="Popup"
+                                   Placement="Bottom"
+                                   PlacementTarget="{Binding ElementName=ToggleButton}"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Border Background="#252542" CornerRadius="12" BorderBrush="#3A3A6E" BorderThickness="2"
+                                        Effect="{StaticResource SoftShadow}">
+                                    <ScrollViewer MaxHeight="200">
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Стиль для ComboBoxItem -->
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="border"
+                                Background="Transparent"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#3A3A6E"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#4A4A7E"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Стиль для TextBox -->
+        <Style x:Key="CustomTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="#2D2D52"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Width" Value="60"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="MaxLength" Value="1"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CaretBrush" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="12"
+                                BorderBrush="#3A3A6E" 
+                                BorderThickness="2">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#000000" BlurRadius="8" ShadowDepth="1" Opacity="0.3"/>
+                            </Border.Effect>
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="0"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Стиль для RadioButton -->
+        <Style x:Key="CustomRadioButtonStyle" TargetType="RadioButton">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="10,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <BulletDecorator Background="Transparent">
+                            <BulletDecorator.Bullet>
+                                <Border x:Name="border" 
+                                        Width="18" Height="18" 
+                                        CornerRadius="9" 
+                                        BorderBrush="#3A3A6E" 
+                                        BorderThickness="2"
+                                        Background="#252542">
+                                    <Ellipse x:Name="checkMark" 
+                                             Width="10" Height="10" 
+                                             Fill="#6B7FFF" 
+                                             Opacity="0"/>
+                                </Border>
+                            </BulletDecorator.Bullet>
+                            <ContentPresenter Margin="5,0,0,0" VerticalAlignment="Center"/>
+                        </BulletDecorator>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="checkMark" Property="Opacity" Value="1"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#6B7FFF"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#2D2D52"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <!-- Рамка окна с закруглёнными углами -->
@@ -123,7 +268,8 @@
                     FontWeight="Bold"
                     FontSize="16"
                     Cursor="Hand"
-                    Click="CloseButton_Click">
+                    Click="CloseButton_Click"
+                    Panel.ZIndex="100">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Setter Property="Template">
@@ -145,14 +291,15 @@
                 </Button.Style>
             </Button>
 
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <!-- Основной контент -->
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="30">
 
-                <!-- Заголовок с градиентом и свечением -->
-                <TextBlock Text="Крестики-Нолики" 
-                           FontSize="48" 
+                <!-- Заголовок -->
+                <TextBlock Text="Крестики-Нолики v2.0" 
+                           FontSize="38" 
                            FontWeight="ExtraBold" 
                            HorizontalAlignment="Center" 
-                           Margin="0,0,0,50"
+                           Margin="0,0,0,20"
                            Effect="{StaticResource GlowEffect}">
                     <TextBlock.Foreground>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
@@ -163,20 +310,101 @@
                     </TextBlock.Foreground>
                 </TextBlock>
 
-                <!-- Индикатор хода с анимацией -->
+                <!-- Панель настроек -->
+                <Border Background="#252542" CornerRadius="15" Padding="20" Margin="0,0,0,20"
+                        BorderBrush="#3A3A6E" BorderThickness="1">
+                    <StackPanel>
+
+                        <!-- Выбор режима игры -->
+                        <TextBlock Text="Режим игры:" FontSize="14" FontWeight="Bold" Foreground="White" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <RadioButton x:Name="ModeTwoPlayer" Content="Два игрока" GroupName="GameMode" 
+                                       Style="{StaticResource CustomRadioButtonStyle}" IsChecked="True"
+                                       Checked="GameMode_Changed"/>
+                            <RadioButton x:Name="ModeWithBot" Content="Игра с ботом" GroupName="GameMode" 
+                                       Style="{StaticResource CustomRadioButtonStyle}"
+                                       Checked="GameMode_Changed"/>
+                        </StackPanel>
+
+                        <!-- Счётчик побед -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
+                            <Border Background="#2D2D52" CornerRadius="10" Padding="15,10" Margin="5">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock x:Name="LabelPlayer1" Text="Игрок 1" Foreground="#4ECDC4" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center"/>
+                                    <TextBlock x:Name="ScorePlayerText" Text="0" FontSize="24" FontWeight="ExtraBold" 
+                                               Foreground="#4ECDC4" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="#2D2D52" CornerRadius="10" Padding="15,10" Margin="5">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="Ничья" Foreground="#FFD93D" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center"/>
+                                    <TextBlock x:Name="ScoreDrawText" Text="0" FontSize="24" FontWeight="ExtraBold" 
+                                               Foreground="#FFD93D" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="#2D2D52" CornerRadius="10" Padding="15,10" Margin="5">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock x:Name="LabelPlayer2" Text="Игрок 2" Foreground="#FF6B8B" FontWeight="Bold" FontSize="12" HorizontalAlignment="Center"/>
+                                    <TextBlock x:Name="ScoreBotText" Text="0" FontSize="24" FontWeight="ExtraBold" 
+                                               Foreground="#FF6B8B" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Кастомизация символов -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+
+                            <!-- Настройка X -->
+                            <Border Background="#2D2D52" CornerRadius="15" Padding="20" Margin="10">
+                                <StackPanel>
+                                    <TextBlock Text="Символ X:" Foreground="#4ECDC4" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                                    <TextBox x:Name="SymbolXInput" Text="X" Style="{StaticResource CustomTextBoxStyle}"
+                                           TextChanged="SymbolX_Changed"/>
+                                    <TextBlock Text="Цвет:" Foreground="#AAAAAA" FontSize="12" HorizontalAlignment="Center" Margin="0,15,0,8"/>
+                                    <ComboBox x:Name="ColorXCombo" SelectedIndex="0" SelectionChanged="ColorX_Changed"
+                                            Style="{StaticResource CustomComboBoxStyle}">
+                                        <ComboBoxItem Content="🔵 Голубой" Tag="#4ECDC4"/>
+                                        <ComboBoxItem Content="🟣 Фиолетовый" Tag="#6B7FFF"/>
+                                        <ComboBoxItem Content="🟢 Зелёный" Tag="#4ECDB4"/>
+                                        <ComboBoxItem Content="🟡 Жёлтый" Tag="#FFD93D"/>
+                                        <ComboBoxItem Content="⚪ Белый" Tag="#FFFFFF"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Настройка O -->
+                            <Border Background="#2D2D52" CornerRadius="15" Padding="20" Margin="10">
+                                <StackPanel>
+                                    <TextBlock Text="Символ O:" Foreground="#FF6B8B" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+                                    <TextBox x:Name="SymbolOInput" Text="O" Style="{StaticResource CustomTextBoxStyle}"
+                                           TextChanged="SymbolO_Changed"/>
+                                    <TextBlock Text="Цвет:" Foreground="#AAAAAA" FontSize="12" HorizontalAlignment="Center" Margin="0,15,0,8"/>
+                                    <ComboBox x:Name="ColorOCombo" SelectedIndex="0" SelectionChanged="ColorO_Changed"
+                                            Style="{StaticResource CustomComboBoxStyle}">
+                                        <ComboBoxItem Content="🌸 Розовый" Tag="#FF6B8B"/>
+                                        <ComboBoxItem Content="🟠 Оранжевый" Tag="#FF9F43"/>
+                                        <ComboBoxItem Content="🔴 Красный" Tag="#FF5252"/>
+                                        <ComboBoxItem Content="🏆 Золотой" Tag="#FFD700"/>
+                                        <ComboBoxItem Content="⚪ Белый" Tag="#FFFFFF"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </Border>
+
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Индикатор хода -->
                 <Border x:Name="StatusBorder" 
                         Background="#252542" 
                         CornerRadius="20" 
-                        Padding="25,15" 
-                        Margin="0,0,0,40"
+                        Padding="20,12" 
+                        Margin="0,0,0,20"
                         BorderBrush="#3A3A6E"
                         BorderThickness="2">
-                    <Border.Effect>
-                        <DropShadowEffect Color="#4ECDC4" BlurRadius="15" ShadowDepth="0" Opacity="0.4"/>
-                    </Border.Effect>
                     <TextBlock x:Name="StatusText" 
                                Text="Ход игрока: X" 
-                               FontSize="24" 
+                               FontSize="20" 
                                FontWeight="Bold"
                                HorizontalAlignment="Center">
                         <TextBlock.Foreground>
@@ -203,11 +431,17 @@
                     <Button x:Name="Btn22" Click="Button_Click" Style="{StaticResource GameButtonStyle}" Tag="2,2"/>
                 </UniformGrid>
 
-                <!-- Кнопка рестарта -->
-                <Button Content="🔄 Начать заново" 
-                        Click="Restart_Click"
-                        Style="{StaticResource RestartButtonStyle}"
-                        HorizontalAlignment="Center"/>
+                <!-- Кнопки управления -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="ActionButton" 
+                            Content="🔄 Новая игра" 
+                            Click="Action_Click"
+                            Style="{StaticResource ControlButtonStyle}"/>
+                    <Button Content="🗑️ Сброс счёта" 
+                            Click="ResetScore_Click"
+                            Style="{StaticResource ControlButtonStyle}"/>
+                </StackPanel>
+
             </StackPanel>
         </Grid>
     </Border>
