@@ -1,0 +1,126 @@
+﻿<Window x:Class="TicTacToe.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Крестики-Нолики" Height="650" Width="500"
+        Background="#1E1E2E" 
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+
+    <Window.Resources>
+        <Style x:Key="GameButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2B2B40"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="60"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                CornerRadius="15" 
+                                BorderBrush="#444466" 
+                                BorderThickness="2">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#353550"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#666699"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="RestartButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF6B6B"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="Margin" Value="0,30,0,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                CornerRadius="25"
+                                BorderThickness="0">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#FF6B6B" BlurRadius="15" ShadowDepth="0" Opacity="0.5"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF5252"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#E63939"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+
+            <TextBlock Text="Крестики-Нолики" 
+                       FontSize="42" 
+                       FontWeight="ExtraBold" 
+                       HorizontalAlignment="Center" 
+                       Margin="0,0,0,40">
+                <TextBlock.Effect>
+                    <DropShadowEffect Color="#6B7FFF" BlurRadius="20" ShadowDepth="0" Opacity="0.6"/>
+                </TextBlock.Effect>
+                <TextBlock.Foreground>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#6B7FFF" Offset="0"/>
+                        <GradientStop Color="#FF6B9D" Offset="1"/>
+                    </LinearGradientBrush>
+                </TextBlock.Foreground>
+            </TextBlock>
+
+            <Border Background="#2B2B40" CornerRadius="15" Padding="20,10" Margin="0,0,0,30">
+                <TextBlock x:Name="StatusText" 
+                           Text="Ход игрока: X" 
+                           FontSize="22" 
+                           FontWeight="SemiBold"
+                           HorizontalAlignment="Center">
+                    <TextBlock.Foreground>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Color="#4ECDC4" Offset="0"/>
+                            <GradientStop Color="#4ECDC4" Offset="1"/>
+                        </LinearGradientBrush>
+                    </TextBlock.Foreground>
+                </TextBlock>
+            </Border>
+
+            <UniformGrid x:Name="GameGrid" Rows="3" Columns="3" Width="340" Height="340">
+                <Button x:Name="Btn00" Click="Button_Click" Style="{StaticResource GameButtonStyle}" Tag="0,0"/>
+                <Button x:Name="Btn01" Click="Button_Click" Style="{StaticResource GameButtonStyle}" Tag="0,1"/>
+                <Button x:Name="Btn02" Click="Button_Click" Style="{StaticResource GameButtonStyle}" Tag="0,2"/>
+
+                <Button x:Name="Btn10" Click="Button_Click" Style="{StaticResource GameButtonStyle}" Tag="1,0"/>
+                <Button x:Name="Btn11" Click="Button_Click" Style="{StaticResource GameButtonStyle}" Tag="1,1"/>
+                <Button x:Name="Btn12" Click="Button_Click" Style="{StaticResource GameButtonStyle}" Tag="1,2"/>
+
+                <Button x:Name="Btn20" Click="Button_Click" Style="{StaticResource GameButtonStyle}" Tag="2,0"/>
+                <Button x:Name="Btn21" Click="Button_Click" Style="{StaticResource GameButtonStyle}" Tag="2,1"/>
+                <Button x:Name="Btn22" Click="Button_Click" Style="{StaticResource GameButtonStyle}" Tag="2,2"/>
+            </UniformGrid>
+
+            <Button Content="🔄 Начать заново" 
+                    Click="Restart_Click"
+                    Style="{StaticResource RestartButtonStyle}"
+                    HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</Window>
